@@ -6,6 +6,7 @@ import com.android.currencyconverter.data.state.NetworkResult
 import com.android.currencyconverter.domain.GetAllCurrencies
 import com.android.currencyconverter.utils.InstantExecutorExtension
 import com.android.currencyconverter.utils.MainCoroutineRule
+import getCurrencyResponseEmptyTestData
 import getCurrencyResponseTestData
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
@@ -34,9 +35,6 @@ class CurrencyConverterViewModelTest {
     @MockK
     private lateinit var currencies: GetAllCurrencies
 
-    @MockK
-    private lateinit var result: NetworkResult<CurrencySymbolResponse>
-
     @Before
     fun setup() {
         MockKAnnotations.init(this)
@@ -59,7 +57,7 @@ class CurrencyConverterViewModelTest {
 
     @Test
     fun `test when received empty currency list`() {
-        var currencySymbolResponseEmptyHashMap = getCurrencyResponseTestData()
+        var currencySymbolResponseEmptyHashMap = getCurrencyResponseEmptyTestData()
         coEvery { currencies() } returns NetworkResult.Success(currencySymbolResponseEmptyHashMap)
         CurrencyConverterViewModel(currencies)
         currencyConverterViewModel.symbols.observeForever {}

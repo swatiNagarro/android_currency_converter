@@ -1,7 +1,7 @@
 package com.android.currencyconverter.data.api
 
-import com.android.currencyconverter.data.response.RatesResponse
 import com.android.currencyconverter.data.response.CurrencySymbolResponse
+import com.android.currencyconverter.data.response.RatesResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query

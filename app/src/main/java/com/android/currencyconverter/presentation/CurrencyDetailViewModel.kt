@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.android.currencyconverter.data.response.RatesResponse
 import com.android.currencyconverter.data.state.NetworkResult
 import com.android.currencyconverter.domain.GetPopularRates
-import com.android.currencyconverter.utils.getPopularRatesHashmap
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
