@@ -56,7 +56,7 @@ class CurrencyConverterFragment : BaseFragment(), AdapterView.OnItemSelectedList
                 ?.let { it1 -> to_currency_spinner.setSelection(it1) }
             currencyList?.indexOf(selectCurrencyTo)
                 ?.let { it1 -> from_currency_spinner.setSelection(it1) }
-            enter_amount_edittext.setText(converted_amount_edittext.text.toString())
+           // enter_amount_edittext.setText(getString(R.string.one_text))
         }
     }
 
