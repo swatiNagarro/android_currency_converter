@@ -4,7 +4,7 @@ data class RatesResponse(
     val base: String,
     val date: String,
     val historical: Boolean,
-    val rates: Rates,
+    val rates: Map<String, String>,
     val success: Boolean,
     val timestamp: Int
 

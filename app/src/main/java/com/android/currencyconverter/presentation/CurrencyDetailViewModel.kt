@@ -41,7 +41,7 @@ class CurrencyDetailViewModel
         when (result) {
             is NetworkResult.Success -> {
                 result.value?.also {
-                    mutableLiveData.value = getPopularRatesHashmap(it.rates)
+                    mutableLiveData.value = it.rates
                 }
             }
             is NetworkResult.Failure -> {
