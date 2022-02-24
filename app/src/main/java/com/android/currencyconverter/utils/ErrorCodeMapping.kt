@@ -7,6 +7,7 @@ fun getErrorMessageFromCode(context: Context, code: Int): String {
     return when (code) {
         500 -> context.getString(R.string.error_message_500)
         404 -> context.getString(R.string.error_message_400)
+        400 -> "Please provide correct amount."
         else -> {
             context.getString(R.string.error_message_any)
         }

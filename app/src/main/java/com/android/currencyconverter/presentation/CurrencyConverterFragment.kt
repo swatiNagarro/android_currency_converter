@@ -17,11 +17,14 @@ import com.android.currencyconverter.utils.observe
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.currency_converter_fragment.*
 
+const val DEFAULT_FIRST_CURRENCY = "AED"
+const val DEFAULT_SECOND_CURRENCY = "INR"
+
 @AndroidEntryPoint
 class CurrencyConverterFragment : BaseFragment(), AdapterView.OnItemSelectedListener {
-    private lateinit var selectCurrencyFrom: String
-    private lateinit var selectCurrencyTo: String
-
+    private var selectCurrencyFrom: String = DEFAULT_FIRST_CURRENCY
+    private var selectCurrencyTo: String = DEFAULT_SECOND_CURRENCY
+    private var currencyList: List<String>? = null
     private val viewModel: CurrencyConverterViewModel by viewModels()
 
     override fun observeViewModel() {
@@ -40,17 +43,30 @@ class CurrencyConverterFragment : BaseFragment(), AdapterView.OnItemSelectedList
 
     override fun onStart() {
         super.onStart()
-        selectCurrencyFrom = "AED"
-        selectCurrencyTo = "INR"
         amountTextChangeHandling()
+        handlingExchangeIconClick()
         detail_button.setOnClickListener {
             findNavController().navigate(R.id.action_to_detailFragment)
         }
     }
 
+    private fun handlingExchangeIconClick() {
+        exchange_icon.setOnClickListener {
+            currencyList?.indexOf(selectCurrencyFrom)
+                ?.let { it1 -> to_currency_spinner.setSelection(it1) }
+            currencyList?.indexOf(selectCurrencyTo)
+                ?.let { it1 -> from_currency_spinner.setSelection(it1) }
+            enter_amount_edittext.setText(converted_amount_edittext.text.toString())
+        }
+    }
+
     private fun amountTextChangeHandling() {
         enter_amount_edittext.doOnTextChanged { text, start, before, count ->
-            viewModel.getConvertedAmount(selectCurrencyFrom, selectCurrencyTo, text.toString())
+            if (text?.isNotEmpty() == true) {
+                viewModel.getConvertedAmount(selectCurrencyFrom, selectCurrencyTo, text.toString())
+            } else {
+                converted_amount_edittext.setText(R.string.zero_text)
+            }
         }
     }
 
@@ -68,9 +84,9 @@ class CurrencyConverterFragment : BaseFragment(), AdapterView.OnItemSelectedList
     }
 
     private fun prepareCurrencySpinners(list: List<String>) {
+        this.currencyList = list
         from_currency_spinner.onItemSelectedListener = this
         to_currency_spinner.onItemSelectedListener = this
-
         context?.let {
             ArrayAdapter(
                 it,

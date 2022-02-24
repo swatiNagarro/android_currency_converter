@@ -90,14 +90,19 @@ class CurrencyConverterViewModel
     }
 
     fun getConvertedAmount(from: String, to: String, amount: String) {
+        if (amount.isEmpty()) {
+            mutableErrorLiveData.value = 400
+            return
+        }
         viewModelScope.launch {
             var fromRate = currencyRatesMap?.get(from).toString().toBigDecimal()
             var toRate = currencyRatesMap?.get(to).toString().toBigDecimal()
-            var amount = amount.toBigDecimal()
+            var amount = amount?.toBigDecimal()
             var response = (amount * toRate) / fromRate
             var finalVal =
                 response.toString().toBigDecimal().setScale(2, RoundingMode.UP).toDouble()
             mutableLiveDataConvertedAmt.value = finalVal.toString()
+
         }
 
     }
