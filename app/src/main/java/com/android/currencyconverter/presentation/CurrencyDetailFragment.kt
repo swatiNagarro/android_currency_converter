@@ -6,10 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.android.currencyconverter.R
-import com.android.currencyconverter.utils.getPopularRatesHashmap
+import com.android.currencyconverter.utils.getErrorMessageFromCode
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.currency_detail_fragment.*
 
@@ -17,7 +18,6 @@ import kotlinx.android.synthetic.main.currency_detail_fragment.*
 class CurrencyDetailFragment : Fragment() {
 
     private val viewModel: CurrencyDetailViewModel by viewModels()
-    private var hashMap: Map<String, Any>? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,14 +29,28 @@ class CurrencyDetailFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         viewModel.rates.observe(this, {
-            hashMap = getPopularRatesHashmap(it.rates)
-            populateTheUI()
+            populateTheUI(it)
         })
 
+        viewModel.errorLiveData.observe(this, {
+            context?.let { it1 ->
+                var error = getErrorMessageFromCode(it1, it)
+                showError(error)
+
+            }
+        })
+    }
+
+    private fun showError(errorMessage: String) {
+        Toast.makeText(
+            activity,
+            errorMessage,
+            Toast.LENGTH_LONG
+        ).show()
     }
 
     @SuppressLint("SetTextI18n")
-    private fun populateTheUI() {
+    private fun populateTheUI(hashMap: Map<String, Any>) {
         hashMap?.let {
             if (it.isNotEmpty()) {
                 val keys = it.keys.toList()
@@ -52,4 +66,6 @@ class CurrencyDetailFragment : Fragment() {
         }
 
     }
+
+
 }

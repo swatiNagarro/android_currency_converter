@@ -7,11 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.android.currencyconverter.R
-import com.android.currencyconverter.utils.getListOfCurrencySymbols
+import com.android.currencyconverter.utils.getErrorMessageFromCode
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.currency_converter_fragment.*
 
@@ -33,7 +34,15 @@ class CurrencyConverterFragment : Fragment(), AdapterView.OnItemSelectedListener
     override fun onStart() {
         super.onStart()
         viewModel.symbols.observe(this, {
-            getListOfCurrencySymbols(it)?.let { it1 -> prepareCurrencySpinners(it1) }
+            prepareCurrencySpinners(it)
+        })
+
+        viewModel.errorLiveData.observe(this, {
+            context?.let { it1 ->
+                var error = getErrorMessageFromCode(it1, it)
+                showError(error)
+
+            }
         })
 
 
@@ -42,6 +51,14 @@ class CurrencyConverterFragment : Fragment(), AdapterView.OnItemSelectedListener
         }
     }
 
+
+    private fun showError(errorMessage: String) {
+        Toast.makeText(
+            activity,
+            errorMessage,
+            Toast.LENGTH_LONG
+        ).show()
+    }
 
     private fun prepareCurrencySpinners(list: List<String>) {
         from_currency_spinner.onItemSelectedListener = this

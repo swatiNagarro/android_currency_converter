@@ -1,4 +1,4 @@
-package com.android.currencyconverter.data
+package com.android.currencyconverter.data.response
 
 data class Rates(
     val AED: Double,

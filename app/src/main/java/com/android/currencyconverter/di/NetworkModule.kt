@@ -1,6 +1,6 @@
 package com.android.currencyconverter.di
 
-import com.android.currencyconverter.data.CurrencyConverterAPI
+import com.android.currencyconverter.data.api.CurrencyConverterAPI
 import com.android.currencyconverter.utils.BASE_URL
 import com.squareup.moshi.Moshi
 import dagger.Module

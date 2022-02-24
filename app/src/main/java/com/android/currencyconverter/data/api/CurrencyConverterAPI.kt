@@ -1,5 +1,7 @@
-package com.android.currencyconverter.data
+package com.android.currencyconverter.data.api
 
+import com.android.currencyconverter.data.response.RatesResponse
+import com.android.currencyconverter.data.response.CurrencySymbolResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -7,7 +9,7 @@ import retrofit2.http.Query
 interface CurrencyConverterAPI {
     @GET("symbols")
     suspend fun getCurrencySymbol(@Query("access_key") access_key: String):
-            Symbols
+            CurrencySymbolResponse
 
     @GET("convert")
     suspend fun getConvertedAmount(

@@ -2,4 +2,7 @@
     <string name="app_name">AndroidCurrencyConverter</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="detail_text">Detail</string>
+    <string name="error_message_500">Unable to connect with server.Please try after some time</string>
+    <string name="error_message_400">Please try later</string>
+    <string name="error_message_any">Technical issue. Try later</string>
 </resources>

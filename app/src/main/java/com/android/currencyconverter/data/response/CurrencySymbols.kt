@@ -1,6 +1,6 @@
-package com.android.currencyconverter.data
+package com.android.currencyconverter.data.response
 
-data class SymbolsX(
+data class CurrencySymbols(
     val AED: String,
     val AFN: String,
     val ALL: String,
