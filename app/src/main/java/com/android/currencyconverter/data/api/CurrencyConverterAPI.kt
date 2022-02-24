@@ -1,5 +1,6 @@
 package com.android.currencyconverter.data.api
 
+import com.android.currencyconverter.data.response.CurrencyRateResponse
 import com.android.currencyconverter.data.response.CurrencySymbolResponse
 import com.android.currencyconverter.data.response.RatesResponse
 import retrofit2.http.GET
@@ -10,6 +11,14 @@ interface CurrencyConverterAPI {
     @GET("symbols")
     suspend fun getCurrencySymbol(@Query("access_key") access_key: String):
             CurrencySymbolResponse
+
+
+    @GET("latest")
+    suspend fun getAllCurrencyRates(
+        @Query("access_key") access_key: String,
+        @Query("base ") base: String
+    ):CurrencyRateResponse
+
 
     @GET("convert")
     suspend fun getConvertedAmount(

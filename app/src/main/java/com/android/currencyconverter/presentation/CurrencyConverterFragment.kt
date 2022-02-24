@@ -1,28 +1,36 @@
 package com.android.currencyconverter.presentation
 
 import android.os.Bundle
-import android.util.Log
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.android.currencyconverter.R
+import com.android.currencyconverter.presentation.base.BaseFragment
 import com.android.currencyconverter.utils.getErrorMessageFromCode
+import com.android.currencyconverter.utils.observe
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.currency_converter_fragment.*
 
 
 @AndroidEntryPoint
-class CurrencyConverterFragment : Fragment(), AdapterView.OnItemSelectedListener {
+class CurrencyConverterFragment : BaseFragment(), AdapterView.OnItemSelectedListener {
     private lateinit var selectCurrencyFrom: String
     private lateinit var selectCurrencyTo: String
 
     private val viewModel: CurrencyConverterViewModel by viewModels()
+
+    override fun observeViewModel() {
+        observe(viewModel.symbols, ::prepareCurrencySpinners)
+        observe(viewModel.errorLiveData, ::showError)
+        observe(viewModel.amount, ::showConvertedAmount)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,31 +39,43 @@ class CurrencyConverterFragment : Fragment(), AdapterView.OnItemSelectedListener
         return inflater.inflate(R.layout.currency_converter_fragment, container, false)
     }
 
+
     override fun onStart() {
         super.onStart()
-        viewModel.symbols.observe(this, {
-            prepareCurrencySpinners(it)
-        })
-
-        viewModel.errorLiveData.observe(this, {
-            context?.let { it1 ->
-                var error = getErrorMessageFromCode(it1, it)
-                showError(error)
-
-            }
-        })
-
-
+        selectCurrencyFrom = "AED"
+        selectCurrencyTo = "INR"
+        amountTextChangeHandling()
         detail_button.setOnClickListener {
             findNavController().navigate(R.id.action_to_detailFragment)
         }
     }
 
+    private fun amountTextChangeHandling() {
+        enter_amount_edittext.addTextChangedListener(object : TextWatcher {
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+            }
 
-    private fun showError(errorMessage: String) {
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+            }
+
+            override fun afterTextChanged(s: Editable) {
+                if (s.isNotEmpty()) {
+                    viewModel.getConvertedAmount(selectCurrencyFrom, selectCurrencyTo, s.toString())
+                }
+
+            }
+        })
+    }
+
+    private fun showConvertedAmount(amt: String) {
+        converted_amount_edittext.setText(amt)
+
+    }
+
+    private fun showError(errorCode: Int) {
         Toast.makeText(
             activity,
-            errorMessage,
+            context?.let { it1 -> getErrorMessageFromCode(it1, errorCode) },
             Toast.LENGTH_LONG
         ).show()
     }
@@ -79,19 +99,28 @@ class CurrencyConverterFragment : Fragment(), AdapterView.OnItemSelectedListener
 
     override fun onItemSelected(parent: AdapterView<*>?, p1: View?, pos: Int, id: Long) {
         if (parent?.id == R.id.from_currency_spinner) {
-            Log.d("test", "Selected from first: ${parent.getItemAtPosition(pos)}")
             selectCurrencyFrom = parent.getItemAtPosition(pos).toString()
+            viewModel.getConvertedAmount(
+                selectCurrencyFrom, selectCurrencyTo,
+                enter_amount_edittext.text.toString()
+            )
         }
 
         if (parent?.id == R.id.to_currency_spinner) {
-            Log.d("test", "Selected from to: ${parent.getItemAtPosition(pos)}")
             selectCurrencyTo = parent.getItemAtPosition(pos).toString()
+            viewModel.getConvertedAmount(
+                selectCurrencyFrom, selectCurrencyTo,
+                enter_amount_edittext.text.toString()
+            )
+
         }
 
     }
+
 
     override fun onNothingSelected(p0: AdapterView<*>?) {
         TODO("Not yet implemented")
     }
+
 
 }

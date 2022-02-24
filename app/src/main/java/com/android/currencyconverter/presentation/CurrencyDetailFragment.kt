@@ -10,14 +10,21 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.android.currencyconverter.R
+import com.android.currencyconverter.presentation.base.BaseFragment
 import com.android.currencyconverter.utils.getErrorMessageFromCode
+import com.android.currencyconverter.utils.observe
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.currency_detail_fragment.*
 
 @AndroidEntryPoint
-class CurrencyDetailFragment : Fragment() {
+class CurrencyDetailFragment : BaseFragment() {
 
     private val viewModel: CurrencyDetailViewModel by viewModels()
+
+    override fun observeViewModel() {
+        observe(viewModel.rates, ::populateTheUI)
+        observe(viewModel.errorLiveData, ::showError)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,23 +35,12 @@ class CurrencyDetailFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        viewModel.rates.observe(this, {
-            populateTheUI(it)
-        })
-
-        viewModel.errorLiveData.observe(this, {
-            context?.let { it1 ->
-                var error = getErrorMessageFromCode(it1, it)
-                showError(error)
-
-            }
-        })
     }
 
-    private fun showError(errorMessage: String) {
+    private fun showError(errorCode: Int) {
         Toast.makeText(
             activity,
-            errorMessage,
+            context?.let { getErrorMessageFromCode(it, errorCode) },
             Toast.LENGTH_LONG
         ).show()
     }
