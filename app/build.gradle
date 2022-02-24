@@ -16,6 +16,8 @@ android {
         versionCode 1
         versionName "1.0"
         buildConfigField("String", "API_KEY", API_KEY)
+        buildConfigField("String", "API_URL", "\"http://data.fixer.io/api/\"")
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 

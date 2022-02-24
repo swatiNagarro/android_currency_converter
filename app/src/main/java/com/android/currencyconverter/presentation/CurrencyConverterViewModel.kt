@@ -22,7 +22,8 @@ class CurrencyConverterViewModel
     private val currenciesRates: GetAllCurrenciesRates
 ) : ViewModel() {
 
-    private var currencyRatesMap: Map<String, Any>? = null
+    var currencyRatesMap: Map<String, Any>? = null
+
     private var mutableLiveData = MutableLiveData<List<String>>()
     val symbols: LiveData<List<String>>
         get() {

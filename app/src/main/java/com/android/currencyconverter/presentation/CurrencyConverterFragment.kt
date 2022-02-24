@@ -1,14 +1,13 @@
 package com.android.currencyconverter.presentation
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.android.currencyconverter.R
@@ -17,7 +16,6 @@ import com.android.currencyconverter.utils.getErrorMessageFromCode
 import com.android.currencyconverter.utils.observe
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.currency_converter_fragment.*
-
 
 @AndroidEntryPoint
 class CurrencyConverterFragment : BaseFragment(), AdapterView.OnItemSelectedListener {
@@ -51,20 +49,9 @@ class CurrencyConverterFragment : BaseFragment(), AdapterView.OnItemSelectedList
     }
 
     private fun amountTextChangeHandling() {
-        enter_amount_edittext.addTextChangedListener(object : TextWatcher {
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-            }
-
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-            }
-
-            override fun afterTextChanged(s: Editable) {
-                if (s.isNotEmpty()) {
-                    viewModel.getConvertedAmount(selectCurrencyFrom, selectCurrencyTo, s.toString())
-                }
-
-            }
-        })
+        enter_amount_edittext.doOnTextChanged { text, start, before, count ->
+            viewModel.getConvertedAmount(selectCurrencyFrom, selectCurrencyTo, text.toString())
+        }
     }
 
     private fun showConvertedAmount(amt: String) {
@@ -83,6 +70,7 @@ class CurrencyConverterFragment : BaseFragment(), AdapterView.OnItemSelectedList
     private fun prepareCurrencySpinners(list: List<String>) {
         from_currency_spinner.onItemSelectedListener = this
         to_currency_spinner.onItemSelectedListener = this
+
         context?.let {
             ArrayAdapter(
                 it,
@@ -92,6 +80,7 @@ class CurrencyConverterFragment : BaseFragment(), AdapterView.OnItemSelectedList
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 from_currency_spinner.adapter = adapter
                 to_currency_spinner.adapter = adapter
+                to_currency_spinner.setSelection(list.indexOf("INR"))
             }
         }
     }

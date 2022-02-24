@@ -1,6 +1,16 @@
 import com.android.currencyconverter.data.response.CurrencySymbolResponse
 import com.android.currencyconverter.data.response.RatesResponse
 
+fun getCurrencyMap(): Map<String, Any> {
+    var hashMap = HashMap<String, String>()
+    hashMap["AED"] = "4.129092"
+    hashMap["CHF"] = "1.043536"
+    hashMap["ALL"] = "121.043536"
+    hashMap["INR"] = "84.816603"
+    hashMap["USD"] = "14.043536"
+    return hashMap
+}
+
 fun getCurrencyResponseTestData(): CurrencySymbolResponse {
     var hashMap = HashMap<String, String>()
     hashMap["AED"] = "4.166993"

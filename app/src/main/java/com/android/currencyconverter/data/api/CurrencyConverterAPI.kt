@@ -17,7 +17,7 @@ interface CurrencyConverterAPI {
     suspend fun getAllCurrencyRates(
         @Query("access_key") access_key: String,
         @Query("base ") base: String
-    ):CurrencyRateResponse
+    ): CurrencyRateResponse
 
 
     @GET("convert")

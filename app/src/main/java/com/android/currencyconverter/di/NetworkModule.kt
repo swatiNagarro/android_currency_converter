@@ -1,7 +1,7 @@
 package com.android.currencyconverter.di
 
+import com.android.currencyconverter.BuildConfig
 import com.android.currencyconverter.data.api.CurrencyConverterAPI
-import com.android.currencyconverter.utils.BASE_URL
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
@@ -20,10 +20,10 @@ import javax.inject.Singleton
 object NetworkModule {
 
     @Provides
-    fun provideBaseUrl() = BASE_URL
+    fun provideBaseUrl() = BuildConfig.API_URL
 
     @Provides
-    fun provideMosi() = Moshi.Builder()
+    fun provideMoshi() = Moshi.Builder()
         .build()
 
     @Provides
