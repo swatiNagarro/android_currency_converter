@@ -8,6 +8,11 @@ import javax.inject.Inject
 class GetAllCurrenciesRates @Inject
 constructor(private val repo: IRepository) {
     suspend operator fun invoke(): NetworkResult<CurrencyRateResponse> {
-        return repo.getAllCurrencyRates()
+        var result = repo.getAllCurrencyRates()
+        return if (result.success) {
+            NetworkResult.Success(result)
+        } else {
+            NetworkResult.Failure(false, result.error.code, null)
+        }
     }
 }
