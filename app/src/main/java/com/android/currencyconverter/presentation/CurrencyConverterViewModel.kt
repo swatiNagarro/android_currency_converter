@@ -61,13 +61,9 @@ class CurrencyConverterViewModel
     private fun handleCurrenciesResponse(result: NetworkResult<CurrencySymbolResponse>) {
         when (result) {
             is NetworkResult.Success -> {
-                if (result.value.success) {
                     result.value.symbols.also {
                         mutableLiveData.value = getListOfCurrencySymbols(it)!!
                     }
-                } else {
-                    mutableErrorLiveData.value = SUBSCIPTION_FAILURE_CODE
-                }
             }
             is NetworkResult.Failure -> {
                 result.errorCode?.also {
@@ -83,9 +79,14 @@ class CurrencyConverterViewModel
 
     private fun handleCurrencyRatesResponse(result: NetworkResult<CurrencyRateResponse>) {
         when (result) {
+
             is NetworkResult.Success -> {
-                result.value.also {
-                    currencyRatesMap = it.rates
+                if (result.value.success) {
+                    result.value.also {
+                        currencyRatesMap = it.rates
+                    }
+                }else{
+                    mutableErrorLiveData.value = SUBSCIPTION_FAILURE_CODE
                 }
             }
             is NetworkResult.Failure -> {
