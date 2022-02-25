@@ -10,6 +10,7 @@ import com.android.currencyconverter.data.state.NetworkResult
 import com.android.currencyconverter.domain.GetAllCurrencies
 import com.android.currencyconverter.domain.GetAllCurrenciesRates
 import com.android.currencyconverter.utils.NETWORK_FAILURE_CODE
+import com.android.currencyconverter.utils.SUBSCIPTION_FAILURE_CODE
 import com.android.currencyconverter.utils.getListOfCurrencySymbols
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -45,7 +46,7 @@ class CurrencyConverterViewModel
         getAllCurrencyRates()
     }
 
-     fun getCurrencySymbols() {
+    fun getCurrencySymbols() {
         viewModelScope.launch {
             handleCurrenciesResponse(currencies())
         }
@@ -60,8 +61,12 @@ class CurrencyConverterViewModel
     private fun handleCurrenciesResponse(result: NetworkResult<CurrencySymbolResponse>) {
         when (result) {
             is NetworkResult.Success -> {
-                result.value.symbols.also {
-                    mutableLiveData.value = getListOfCurrencySymbols(it)!!
+                if (result.value.success) {
+                    result.value.symbols.also {
+                        mutableLiveData.value = getListOfCurrencySymbols(it)!!
+                    }
+                } else {
+                    mutableErrorLiveData.value = SUBSCIPTION_FAILURE_CODE
                 }
             }
             is NetworkResult.Failure -> {

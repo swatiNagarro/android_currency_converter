@@ -8,6 +8,7 @@ fun getErrorMessageFromCode(context: Context, code: Int): String {
         500 -> context.getString(R.string.error_message_500)
         404 -> context.getString(R.string.error_message_400)
         400 -> "Please provide correct amount."
+        104 -> "Your monthly usage limit has been reached. Please upgrade your Subscription Plan."
         else -> {
             context.getString(R.string.error_message_any)
         }

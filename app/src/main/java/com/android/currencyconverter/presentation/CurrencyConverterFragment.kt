@@ -83,6 +83,7 @@ class CurrencyConverterFragment : BaseFragment(), AdapterView.OnItemSelectedList
             context?.let { it1 -> getErrorMessageFromCode(it1, errorCode) },
             Toast.LENGTH_LONG
         ).show()
+        detail_button.isEnabled = false
     }
 
     private fun prepareCurrencySpinners(list: List<String>) {
