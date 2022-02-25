@@ -61,6 +61,7 @@ class CurrencyConverterViewModelTest {
         var currencySymbolResponse = getCurrencyResponseTestData()
         coEvery { currencies() } returns NetworkResult.Success(currencySymbolResponse)
         currencyConverterViewModel = CurrencyConverterViewModel(currencies, currenciesRates)
+        currencyConverterViewModel.getCurrencySymbols()
         currencyConverterViewModel.symbols.observeForever {}
         assertEquals(
             currencyConverterViewModel.symbols.value?.size,
@@ -75,6 +76,7 @@ class CurrencyConverterViewModelTest {
         var currencySymbolResponseEmptyHashMap = getCurrencyResponseEmptyTestData()
         coEvery { currencies() } returns NetworkResult.Success(currencySymbolResponseEmptyHashMap)
         currencyConverterViewModel = CurrencyConverterViewModel(currencies, currenciesRates)
+        currencyConverterViewModel.getCurrencySymbols()
         currencyConverterViewModel.symbols.observeForever {}
         assertEquals(true, currencyConverterViewModel.symbols.value?.isEmpty())
     }
@@ -86,6 +88,7 @@ class CurrencyConverterViewModelTest {
             null
         )
         currencyConverterViewModel = CurrencyConverterViewModel(currencies, currenciesRates)
+        currencyConverterViewModel.getCurrencySymbols()
         currencyConverterViewModel.errorLiveData.observeForever {}
         assertEquals(500, currencyConverterViewModel.errorLiveData.value)
     }

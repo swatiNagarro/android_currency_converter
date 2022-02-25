@@ -41,11 +41,11 @@ class CurrencyConverterViewModel
         get() = mutableErrorLiveData
 
     init {
-        getCurrencySymbols()
+       // getCurrencySymbols()
         getAllCurrencyRates()
     }
 
-    private fun getCurrencySymbols() {
+     fun getCurrencySymbols() {
         viewModelScope.launch {
             handleCurrenciesResponse(currencies())
         }

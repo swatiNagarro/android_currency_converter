@@ -43,6 +43,7 @@ class CurrencyConverterFragment : BaseFragment(), AdapterView.OnItemSelectedList
 
     override fun onStart() {
         super.onStart()
+        viewModel.getCurrencySymbols()
         amountTextChangeHandling()
         handlingExchangeIconClick()
         detail_button.setOnClickListener {
