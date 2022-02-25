@@ -2,7 +2,6 @@ package com.android.currencyconverter.data.repo
 
 import com.android.currencyconverter.BuildConfig
 import com.android.currencyconverter.data.api.CurrencyConverterAPI
-import com.android.currencyconverter.data.base.BaseRepository
 import com.android.currencyconverter.data.response.CurrencyRateResponse
 import com.android.currencyconverter.data.response.CurrencySymbolResponse
 import com.android.currencyconverter.data.response.RatesResponse
@@ -10,7 +9,7 @@ import com.android.currencyconverter.utils.BASE_CURRENCY
 import javax.inject.Inject
 
 class CurrencyRepo @Inject
-constructor(private val api: CurrencyConverterAPI) : IRepository, BaseRepository() {
+constructor(private val api: CurrencyConverterAPI) : IRepository {
     override suspend fun getAllCurrencySymbols(): CurrencySymbolResponse {
         return api.getCurrencySymbol(BuildConfig.API_KEY)
     }
