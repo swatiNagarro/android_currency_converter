@@ -9,6 +9,7 @@ import com.android.currencyconverter.data.response.RatesResponse
 import com.android.currencyconverter.data.state.NetworkResult
 import com.android.currencyconverter.domain.GetHistoryOfGivenCurrency
 import com.android.currencyconverter.domain.GetPopularRates
+import com.android.currencyconverter.utils.NETWORK_FAILURE_CODE
 import com.android.currencyconverter.utils.getCurrentDate
 import com.android.currencyconverter.utils.getYesterdayDate
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -73,11 +74,11 @@ class CurrencyDetailViewModel
     }
 
     private fun getConvertedAmount(from: String, to: String, amount: String = "1"): String {
-        var fromRate = from.toBigDecimal()
-        var toRate = to.toBigDecimal()
-        var amount = amount?.toBigDecimal()
-        var response = (amount * toRate) / fromRate
-        var finalVal =
+        val fromRate = from.toBigDecimal()
+        val toRate = to.toBigDecimal()
+        val amt = amount.toBigDecimal()
+        val response = (amt * toRate) / fromRate
+        val finalVal =
             response.toString().toBigDecimal().setScale(2, RoundingMode.UP).toDouble()
         return finalVal.toString()
 
@@ -86,7 +87,7 @@ class CurrencyDetailViewModel
     private fun handleCurrenciesResponse(result: NetworkResult<RatesResponse>) {
         when (result) {
             is NetworkResult.Success -> {
-                result.value?.also {
+                result.value.also {
                     mutableLiveData.value = it.rates
                 }
             }
@@ -96,6 +97,9 @@ class CurrencyDetailViewModel
                 }
             }
 
+            else -> {
+                mutableErrorLiveData.value = NETWORK_FAILURE_CODE
+            }
         }
     }
 
@@ -103,7 +107,7 @@ class CurrencyDetailViewModel
     private fun handleCurrenciesHistory(result: NetworkResult<RatesResponse>) {
         when (result) {
             is NetworkResult.Success -> {
-                result.value?.also {
+                result.value.also {
                     prepareHistoryList(it)
                     mutableLiveDataHistory.value = list
                 }
@@ -114,14 +118,17 @@ class CurrencyDetailViewModel
                 }
             }
 
+            else -> {
+                mutableErrorLiveData.value = NETWORK_FAILURE_CODE
+            }
         }
     }
 
     private fun prepareHistoryList(it: RatesResponse) {
-        var first = getFromCurrency(it)
-        var sec = getToCurrency(it)
-        var rateForFromCurrencyForBase = it?.rates?.get(first)
-        var rateForToCurrencyFromBase = it?.rates?.get(sec)
+        val first = getFromCurrency(it)
+        val sec = getToCurrency(it)
+        val rateForFromCurrencyForBase = it.rates.get(first)
+        val rateForToCurrencyFromBase = it.rates.get(sec)
         list.add(
             getCurrencyHistory(
                 first, sec, it,
@@ -131,10 +138,10 @@ class CurrencyDetailViewModel
     }
 
     private fun getToCurrency(it: RatesResponse) =
-        it?.rates?.keys?.toList()[1]
+        it.rates.keys.toList()[1]
 
     private fun getFromCurrency(it: RatesResponse) =
-        it?.rates?.keys?.toList()[0]
+        it.rates.keys.toList()[0]
 
     private fun getCurrencyHistory(
         first: String,
@@ -144,7 +151,7 @@ class CurrencyDetailViewModel
         to: String?
     ): CurrencyHistory {
         return CurrencyHistory(
-            first, sec, it?.date,
+            first, sec, it.date,
             getConvertedAmount(rateFrom!!, to!!)
         )
     }
