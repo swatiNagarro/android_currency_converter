@@ -46,7 +46,9 @@ class CurrencyConverterFragment : BaseFragment(), AdapterView.OnItemSelectedList
         amountTextChangeHandling()
         handlingExchangeIconClick()
         detail_button.setOnClickListener {
-            findNavController().navigate(R.id.action_to_detailFragment)
+            var action = CurrencyConverterFragmentDirections
+                .actionToDetailFragment(selectCurrencyFrom, selectCurrencyTo)
+            findNavController().navigate(action)
         }
     }
 
@@ -56,7 +58,6 @@ class CurrencyConverterFragment : BaseFragment(), AdapterView.OnItemSelectedList
                 ?.let { it1 -> to_currency_spinner.setSelection(it1) }
             currencyList?.indexOf(selectCurrencyTo)
                 ?.let { it1 -> from_currency_spinner.setSelection(it1) }
-           // enter_amount_edittext.setText(getString(R.string.one_text))
         }
     }
 

@@ -20,8 +20,14 @@
         android:label="currency_detail_fragment"
         tools:layout="@layout/currency_detail_fragment">
         <argument
-            android:name="noteId"
-            android:defaultValue="0"
-            app:argType="integer" />
+            android:name="from_currency"
+            app:nullable="true"
+            app:argType="string" />
+
+        <argument
+            android:name="to_currency"
+            app:nullable="true"
+            app:argType="string" />
+
     </fragment>
 </navigation>

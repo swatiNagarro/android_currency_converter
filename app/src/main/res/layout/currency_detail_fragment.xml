@@ -7,17 +7,23 @@
 
     <LinearLayout
         android:id="@+id/layout_historical_data"
-        android:layout_width="195dp"
+        android:layout_width="@dimen/_195dp"
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
+        android:gravity="center_vertical"
         android:orientation="vertical">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/currency_history_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"></androidx.recyclerview.widget.RecyclerView>
 
 
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/layout_rates_other_currencies"
-        android:layout_width="195dp"
+        android:layout_width="@dimen/_195dp"
         android:layout_height="match_parent"
         android:layout_alignParentEnd="true"
         android:gravity="center_vertical"
@@ -26,4 +32,10 @@
 
     </LinearLayout>
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true" />
 </RelativeLayout>

@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-kapt'
     id 'kotlin-android-extensions'
     id 'dagger.hilt.android.plugin'
+    id 'androidx.navigation.safeargs.kotlin'
 }
 
 android {
@@ -36,6 +37,9 @@ android {
     }
     packagingOptions {
         resources.excludes.add("META-INF/*")
+    }
+    buildFeatures{
+        viewBinding = true
     }
 }
 
