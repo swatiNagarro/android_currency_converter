@@ -8,6 +8,6 @@ import com.android.currencyconverter.data.state.NetworkResult
 interface IRepository {
     suspend fun getAllCurrencySymbols(): CurrencySymbolResponse
     suspend fun getAllCurrencyRates(): CurrencyRateResponse
-    suspend fun getRatesForPopularCurrencies(dateInUrl: String,popularCurrency:String): NetworkResult<RatesResponse>
+    suspend fun getRatesForPopularCurrencies(dateInUrl: String,popularCurrency:String): RatesResponse
 
 }

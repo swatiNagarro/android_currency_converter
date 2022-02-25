@@ -10,7 +10,6 @@ import com.android.currencyconverter.data.state.NetworkResult
 import com.android.currencyconverter.domain.GetHistoryOfGivenCurrency
 import com.android.currencyconverter.domain.GetPopularRates
 import com.android.currencyconverter.utils.NETWORK_FAILURE_CODE
-import com.android.currencyconverter.utils.SUBSCIPTION_FAILURE_CODE
 import com.android.currencyconverter.utils.getCurrentDate
 import com.android.currencyconverter.utils.getYesterdayDate
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -88,12 +87,8 @@ class CurrencyDetailViewModel
     private fun handleCurrenciesResponse(result: NetworkResult<RatesResponse>) {
         when (result) {
             is NetworkResult.Success -> {
-                if (result.value.success) {
-                    result.value.also {
-                        mutableLiveData.value = it.rates
-                    }
-                }else{
-                    mutableErrorLiveData.value = SUBSCIPTION_FAILURE_CODE
+                result.value.also {
+                    mutableLiveData.value = it.rates
                 }
             }
             is NetworkResult.Failure -> {

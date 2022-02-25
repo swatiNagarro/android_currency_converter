@@ -10,7 +10,12 @@ import javax.inject.Inject
 class GetPopularRates @Inject
 constructor(private val repo: IRepository) {
     suspend operator fun invoke(): NetworkResult<RatesResponse> {
-        return repo.getRatesForPopularCurrencies(getCurrentDate(),POPULAR_CURRENCIES)
+        var result = repo.getRatesForPopularCurrencies(getCurrentDate(), POPULAR_CURRENCIES)
+        return if (result.success) {
+            NetworkResult.Success(result)
+        } else {
+            NetworkResult.Failure(false, result.error.code, null)
+        }
 
     }
 

@@ -5,6 +5,7 @@ import com.android.currencyconverter.data.api.CurrencyConverterAPI
 import com.android.currencyconverter.data.base.BaseRepository
 import com.android.currencyconverter.data.response.CurrencyRateResponse
 import com.android.currencyconverter.data.response.CurrencySymbolResponse
+import com.android.currencyconverter.data.response.RatesResponse
 import com.android.currencyconverter.utils.BASE_CURRENCY
 import javax.inject.Inject
 
@@ -18,11 +19,11 @@ constructor(private val api: CurrencyConverterAPI) : IRepository, BaseRepository
         return api.getAllCurrencyRates(BuildConfig.API_KEY, BASE_CURRENCY)
     }
 
-    override suspend fun getRatesForPopularCurrencies(dateInUrl: String, popularCurrency: String) =
-        safeApiCall {
-            api.getRatesForPopularCurrencies(
-                dateInUrl, BuildConfig.API_KEY,
-                BASE_CURRENCY, popularCurrency
-            )
-        }
+    override suspend fun getRatesForPopularCurrencies(dateInUrl: String, popularCurrency: String):
+            RatesResponse {
+        return api.getRatesForPopularCurrencies(
+            dateInUrl, BuildConfig.API_KEY,
+            BASE_CURRENCY, popularCurrency
+        )
+    }
 }

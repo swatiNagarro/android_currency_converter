@@ -20,8 +20,13 @@ constructor(private val repo: IRepository) {
     }
 
     suspend operator fun invoke(): NetworkResult<RatesResponse> {
-        return repo.getRatesForPopularCurrencies(dateInUrl, currencies)
-
+        var result = repo.getRatesForPopularCurrencies(dateInUrl, currencies)
+        return if (result.success) {
+            NetworkResult.Success(result)
+        } else {
+            NetworkResult.Failure(false, result.error.code, null)
+        }
     }
 
 }
+

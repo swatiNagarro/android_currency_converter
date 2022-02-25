@@ -6,6 +6,7 @@ data class RatesResponse(
     val historical: Boolean,
     val rates: Map<String, String>,
     val success: Boolean,
-    val timestamp: Int
+    val timestamp: Int,
+    val error: CurrencyError
 
 )
