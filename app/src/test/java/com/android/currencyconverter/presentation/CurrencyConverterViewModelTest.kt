@@ -4,6 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.android.currencyconverter.data.state.NetworkResult
 import com.android.currencyconverter.domain.GetAllCurrencies
 import com.android.currencyconverter.domain.GetAllCurrenciesRates
+import com.android.currencyconverter.utils.BAD_INPUT_CODE
 import com.android.currencyconverter.utils.InstantExecutorExtension
 import com.android.currencyconverter.utils.MainCoroutineRule
 import getCurrencyMap
@@ -52,8 +53,16 @@ class CurrencyConverterViewModelTest {
         currencyConverterViewModel.getConvertedAmount("AED", "INR", "20")
         currencyConverterViewModel.amount.observeForever {}
         assertEquals("410.83", currencyConverterViewModel.amount.value)
+    }
 
 
+    @Test
+    fun `test currency converter when amount is empty `() {
+        currencyConverterViewModel = CurrencyConverterViewModel(currencies, currenciesRates)
+        currencyConverterViewModel.currencyRatesMap = getCurrencyMap()
+        currencyConverterViewModel.getConvertedAmount("AED", "INR", "")
+        currencyConverterViewModel.errorLiveData.observeForever {}
+        assertEquals(BAD_INPUT_CODE, currencyConverterViewModel.errorLiveData.value)
     }
 
     @Test
@@ -91,6 +100,18 @@ class CurrencyConverterViewModelTest {
         currencyConverterViewModel.getCurrencySymbols()
         currencyConverterViewModel.errorLiveData.observeForever {}
         assertEquals(500, currencyConverterViewModel.errorLiveData.value)
+    }
+
+    @Test
+    fun `test when user subscription expired`() {
+        coEvery { currencies() } returns NetworkResult.Failure(
+            false, 104,
+            null
+        )
+        currencyConverterViewModel = CurrencyConverterViewModel(currencies, currenciesRates)
+        currencyConverterViewModel.getCurrencySymbols()
+        currencyConverterViewModel.errorLiveData.observeForever {}
+        assertEquals(104, currencyConverterViewModel.errorLiveData.value)
     }
 
 

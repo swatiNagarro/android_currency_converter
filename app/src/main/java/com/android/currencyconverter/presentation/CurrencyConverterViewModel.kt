@@ -1,5 +1,7 @@
 package com.android.currencyconverter.presentation
-
+/**
+ * This class is responsible for getting currency  data from network and handling conversion logic
+ */
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,6 +11,7 @@ import com.android.currencyconverter.data.response.CurrencySymbolResponse
 import com.android.currencyconverter.data.state.NetworkResult
 import com.android.currencyconverter.domain.GetAllCurrencies
 import com.android.currencyconverter.domain.GetAllCurrenciesRates
+import com.android.currencyconverter.utils.BAD_INPUT_CODE
 import com.android.currencyconverter.utils.NETWORK_FAILURE_CODE
 import com.android.currencyconverter.utils.getListOfCurrencySymbols
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -97,7 +100,7 @@ class CurrencyConverterViewModel
 
     fun getConvertedAmount(from: String, to: String, amount: String) {
         if (amount.isEmpty()) {
-            mutableErrorLiveData.value = 400
+            mutableErrorLiveData.value = BAD_INPUT_CODE
             return
         }
         viewModelScope.launch {

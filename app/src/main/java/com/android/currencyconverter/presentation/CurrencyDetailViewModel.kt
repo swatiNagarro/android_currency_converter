@@ -1,5 +1,9 @@
 package com.android.currencyconverter.presentation
 
+/**
+ * This class is responsible for getting currency  details from network and handling UI logic
+ */
+
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -46,8 +50,11 @@ class CurrencyDetailViewModel
         getRates()
     }
 
-    // This is temporary logic.As we do not have paid subscription, not able to access time-series API.
-// Just for demo purpose, doing call one today and other for yesterday
+    /**
+     *    This is temporary logic.As we do not have paid subscription, not able to access time-series API.
+    Just for demo purpose, doing call one today and other for yesterday
+     */
+
     fun getHistoryRatesForGivenCurrency(from: String, to: String) {
 
         viewModelScope.launch {
